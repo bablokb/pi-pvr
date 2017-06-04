@@ -1,0 +1,40 @@
+#!/bin/bash
+# --------------------------------------------------------------------------
+# Install tvheadend for Raspbian
+#
+# Author: Bernhard Bablok
+# License: GPL3
+#
+# Website: https://github.com/bablokb/pi-pvr
+#
+# --------------------------------------------------------------------------
+
+# --- defaults used during installation   ----------------------------------
+
+# --- helper script   ------------------------------------------------------
+
+check_packages() {
+  local p
+  for p in "$@"; do
+    echo -en "Checking $p ... " >&2
+    dpkg -s "$p" 2>/dev/null | grep -q "Status.*ok" || return 0
+    echo "ok" >&2
+  done
+  return 1
+}
+
+# ---- add repository   ----------------------------------------------------
+
+if [ ! -f /etc/apt/sources.list.d/tvheadend.list ]; then
+  echo "deb https://dl.bintray.com/tvheadend/deb jessie release" >   \
+       /etc/apt/sources.list.d/tvheadend.list
+  apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 379CE192D401AB61
+fi
+
+# --- basic packages   ------------------------------------------------------
+
+PACKAGES="apt-transport-https tvheadend"
+if [ -n "$PACKAGES" ] && check_packages $PACKAGES; then
+  apt-get update
+  apt-get -y install $PACKAGES
+fi
