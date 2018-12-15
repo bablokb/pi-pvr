@@ -1,17 +1,18 @@
 #!/bin/bash
-# --------------------------------------------------------------------------
-# Install tvheadend for Raspbian
+# ---------------------------------------------------------------------------
+# This script installs files and services specific to the project.
 #
 # Author: Bernhard Bablok
 # License: GPL3
 #
 # Website: https://github.com/bablokb/pi-pvr
 #
-# --------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 
-# --- defaults used during installation   ----------------------------------
+PACKAGES="tvheadend minidlna"
+PROJECT="pi-pvr"
 
-# --- helper script   ------------------------------------------------------
+# --- basic packages   ------------------------------------------------------
 
 check_packages() {
   local p
@@ -23,18 +24,60 @@ check_packages() {
   return 1
 }
 
-# ---- add repository   ----------------------------------------------------
+install_packages() {
+  if [ -n "$PACKAGES" ] && check_packages $PACKAGES; then
+    echo -e "[INFO] installing additional packages" 2>&1
+    apt-get update
+    apt-get -y --no-upgrade install $PACKAGES
+  fi
+}
 
-if [ ! -f /etc/apt/sources.list.d/tvheadend.list ]; then
-  echo "deb https://dl.bintray.com/tvheadend/deb jessie release" >   \
-       /etc/apt/sources.list.d/tvheadend.list
-  apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 379CE192D401AB61
-fi
+# --- install specific files   ----------------------------------------------
 
-# --- basic packages   ------------------------------------------------------
+install_files() {
+  echo -e "[INFO] installing project files" 2>&1
 
-PACKAGES="apt-transport-https tvheadend"
-if [ -n "$PACKAGES" ] && check_packages $PACKAGES; then
-  apt-get update
-  apt-get -y install $PACKAGES
-fi
+  rand="$RANDOM"
+  if [ -f "/etc/$PROJECT.conf" ]; then
+    # save current configuration
+    mv "/etc/$PROJECT.conf" "/etc/$PROJECT.conf.$rand"
+  fi
+
+  for f in `find $(dirname "$0")/../files/ -type f -not -name "*.pyc"`; do
+    target="${f#*files}"
+    target_dir="${target%/*}"
+    [ ! -d "$target_dir" ] && mkdir -p "$target_dir"
+    cp "$f" "$target"
+    chown root:root "$target"
+  done
+
+  chmod 755 "/usr/local/sbin/$PROJECT"
+
+  # restore old configuration
+  if [ -f "/etc/$PROJECT.conf.$rand" ]; then
+    mv -f "/etc/$PROJECT.conf" "/etc/$PROJECT.conf.new"
+    mv "/etc/$PROJECT.conf.$rand" "/etc/$PROJECT.conf"
+    echo -e "[INFO] new version of configuration file saved to: /etc/$PROJECT.conf.new" 2>&1
+  fi
+}
+
+# --- configure system   ----------------------------------------------------
+
+configure_system() {
+  :
+}
+
+# --- activate service   ----------------------------------------------------
+
+enable_services() {
+  :
+}
+
+# --- main program   --------------------------------------------------------
+
+install_packages
+install_files
+configure_system
+enable_services
+
+echo "[INFO] installation completed"
