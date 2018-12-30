@@ -129,12 +129,6 @@ def check_next_rec_time(options,out=True):
     Msg.msg("INFO","next recording not within time-span of %s" % options.span)
     sys.exit(1)
 
-# --- process boot logic   --------------------------------------------------
-
-def process_boot_logic(options):
-  """ process boot logic """
-  pass
-
 # --- process post recording logic   ----------------------------------------
 
 def process_post_rec_logic(options):
@@ -156,9 +150,6 @@ def get_parser():
   parser.add_argument('-N', '--next-rec-within', metavar='time-span',
     dest='span', default=None,
     help='check if a recording is scheduled within time-span')
-  parser.add_argument('-b', '--boot', action='store_true',
-    dest='do_boot',
-    help='execute boot-hook logic')
   parser.add_argument('-p', '--post-rec', action='store_true',
     dest='do_post',
     help='execute post-recording logic')
@@ -222,8 +213,6 @@ if __name__ == '__main__':
     print_upcoming(options)
   elif options.span:
    check_next_rec_time(options)
-  elif options.do_boot:
-    process_boot_logic(options)
   elif options.do_post:
     process_post_rec_logic(options)
   sys.exit(0)
