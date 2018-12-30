@@ -15,8 +15,8 @@ delta_shutdown="30"  # 30 minutes
 # we only do something special on an rtc alarm
 
 if [ "$1" = "alarm" ]; then
-  if ! pvrctl.py -q -N "$delta"; then
+  if ! pvrctl.py -q -N "$delta_rec"; then
     # no recording within delta, so give the system some time
     # to update the EPG and shutdown again
-    shutdown -p +"$delta_shutdown"
+    shutdown -h +"$delta_shutdown"
 fi
