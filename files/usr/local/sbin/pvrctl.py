@@ -129,12 +129,6 @@ def check_next_rec_time(options,out=True):
     Msg.msg("INFO","next recording not within time-span of %s" % options.span)
     sys.exit(1)
 
-# --- process post recording logic   ----------------------------------------
-
-def process_post_rec_logic(options):
-  """ process post recording logic """
-  pass
-
 # --- commandline parser  ---------------------------------------------------
 
 def get_parser():
@@ -150,9 +144,6 @@ def get_parser():
   parser.add_argument('-N', '--next-rec-within', metavar='time-span',
     dest='span', default=None,
     help='check if a recording is scheduled within time-span')
-  parser.add_argument('-p', '--post-rec', action='store_true',
-    dest='do_post',
-    help='execute post-recording logic')
 
   parser.add_argument('-q', '--quiet', default=False, action='store_true',
     dest='quiet',
@@ -173,7 +164,6 @@ def get_parser():
 def get_config(parser):
   return {
     "MSG_LEVEL":           parser.get('CONFIG',"MSG_LEVEL"),
-    "NO_SHUTDOWN_BEFORE":  parser.getint('CONFIG',"NO_SHUTDOWN_BEFORE"),
 
     "hostname":            parser.get('SERVER',"hostname"),
     "user":                parser.get('SERVER',"user"),
@@ -213,7 +203,5 @@ if __name__ == '__main__':
     print_upcoming(options)
   elif options.span:
    check_next_rec_time(options)
-  elif options.do_post:
-    process_post_rec_logic(options)
   sys.exit(0)
 
