@@ -165,10 +165,11 @@ def get_parser():
 
   parser.add_argument('-q', '--quiet', default=False, action='store_true',
     dest='quiet',
-    help='do not print anything')
+    help='do not print anything (sets log-level to NONE)')
   parser.add_argument('-l', '--level', metavar='Log-Level',
     dest='level', default='INFO',
-    help='print messages at least of given level')
+    choices=['NONE','ERROR','WARN','INFO','DEBUG','TRACE'],
+    help='log level: one of NONE, ERROR, WARN, INFO, DEBUG, TRACE')
   parser.add_argument('-h', '--help', action='help',
     help='print this help')
 
@@ -209,6 +210,8 @@ if __name__ == '__main__':
     Msg.level = options.level
   else:
     Msg.level = config["MSG_LEVEL"]
+  if options.quiet:
+    Msg.level = 'NONE'
 
   # add global objects
   options.config = config
