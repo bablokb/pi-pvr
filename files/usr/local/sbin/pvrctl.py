@@ -104,6 +104,9 @@ def get_parser():
   parser.add_argument('-n', '--next-rec-time', action='store_true',
     dest='do_next',
     help='print start-time of next recording')
+  parser.add_argument('-N', '--next-rec-within', metavar='time-span',
+    dest='span', default=None,
+    help='check if a recording is scheduled within time-span')
   parser.add_argument('-b', '--boot', action='store_true',
     dest='do_boot',
     help='execute boot-hook logic')
