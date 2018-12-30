@@ -41,9 +41,11 @@ def api_upcoming():
                                     options.config['password'],
                                     options.config['hostname'],
                                     TVHEADEND_UPCOMING_API)
-  req = requests.get(url)
-  return sorted(req.json()['entries'], key=itemgetter('start_real')) 
-
+  try:
+    req = requests.get(url)
+    return sorted(req.json()['entries'], key=itemgetter('start_real'))
+  except:
+    return []
 
 # --- print upcoming recordings   -------------------------------------------
 
@@ -79,6 +81,53 @@ def print_next_rec_time(options,out=True):
     print(start.strftime("%Y-%m-%d %H:%M:%S"))
   else:
     print("0")
+
+# --- parse span-value and return timedelta object   -----------------------
+
+def parse_span(value):
+  """ parse span-value and return timedelta object """
+
+  # parse span-value  [days] HH:MM
+  delta_span = value.split(" ")
+  if len(delta_span) > 1:
+    delta_d    = int(delta_span[0])
+    delta_span = delta_span[1]
+  else:
+    delta_d    = 0
+    delta_span = delta_span[0]
+
+  delta_span = delta_span.split(":")
+  delta_h    = int(delta_span[0])
+  if len(delta_span) > 1:
+    delta_m = int(delta_span[1])
+  else:
+    delta_m = 0
+
+  return datetime.timedelta(days=delta_d,hours=delta_h,minutes=delta_m)
+
+# --- check next recording time   ------------------------------------------
+
+def check_next_rec_time(options,out=True):
+  """ output next recording time """
+
+  Msg.msg("INFO","checking next recording within time-span of %s" % options.span)
+  delta = parse_span(options.span)
+  Msg.msg("DEBUG","delta: %s" % delta)
+
+  next_recordings = api_upcoming()
+  have_rec = False
+  if len(next_recordings):
+    delta = parse_span(options.span)
+    start = datetime.datetime.fromtimestamp(next_recordings[0]['start_real'])
+    if start - datetime.datetime.now() <= delta:
+      have_rec = True
+
+  if have_rec:
+    Msg.msg("INFO","next recording within time-span of %s" % options.span)
+    sys.exit(0)
+  else:
+    Msg.msg("INFO","next recording not within time-span of %s" % options.span)
+    sys.exit(1)
 
 # --- process boot logic   --------------------------------------------------
 
@@ -118,7 +167,7 @@ def get_parser():
     dest='quiet',
     help='do not print anything')
   parser.add_argument('-l', '--level', metavar='Log-Level',
-    dest='level', default=None,
+    dest='level', default='INFO',
     help='print messages at least of given level')
   parser.add_argument('-h', '--help', action='help',
     help='print this help')
@@ -168,6 +217,8 @@ if __name__ == '__main__':
     print_next_rec_time(options)
   elif options.do_upcoming:
     print_upcoming(options)
+  elif options.span:
+   check_next_rec_time(options)
   elif options.do_boot:
     process_boot_logic(options)
   elif options.do_post:
