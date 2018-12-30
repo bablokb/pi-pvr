@@ -22,7 +22,8 @@ class Msg(object):
     "DEBUG":1,
     "INFO":2,
     "WARN":3,
-    "ERROR":4
+    "ERROR":4,
+    "NONE": 5
     }
 
   level = "INFO"    # override during initialization
