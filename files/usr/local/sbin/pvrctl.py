@@ -74,8 +74,11 @@ def print_next_rec_time(options,out=True):
   """ output next recording time """
 
   next_recordings = api_upcoming()
-  start = datetime.datetime.fromtimestamp(next_recordings[0]['start_real'])
-  print(start.strftime("%Y-%m-%d %H:%M:%S"))
+  if len(next_recordings):
+    start = datetime.datetime.fromtimestamp(next_recordings[0]['start_real'])
+    print(start.strftime("%Y-%m-%d %H:%M:%S"))
+  else:
+    print("0")
 
 # --- process boot logic   --------------------------------------------------
 
