@@ -9,7 +9,7 @@
 #
 # ---------------------------------------------------------------------------
 
-PACKAGES="tvheadend minidlna"
+PACKAGES=""
 PROJECT="pi-pvr"
 
 # --- basic packages   ------------------------------------------------------
@@ -51,7 +51,9 @@ install_files() {
     chown root:root "$target"
   done
 
-  chmod 755 "/usr/local/sbin/$PROJECT"
+  chmod 755 "/usr/local/sbin/pvrctl.py"
+  chmod 755 "/usr/local/sbin/pvr_on_boot.sh"
+  chmod 755 "/usr/local/sbin/pvr_after_recording.sh"
 
   # restore old configuration
   if [ -f "/etc/$PROJECT.conf.$rand" ]; then
