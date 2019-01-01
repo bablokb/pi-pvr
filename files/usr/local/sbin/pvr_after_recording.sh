@@ -9,7 +9,7 @@
 #
 # --------------------------------------------------------------------------
 
-delta_rec="01:00"    # one hour
+delta_rec="00:30"    # 30 minutes
 
 # shutdown the system after a recording unless
 #   - the system was manually started
