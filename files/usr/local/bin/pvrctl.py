@@ -33,7 +33,7 @@ class Options(object):
 
 # --- query upcoming events   -----------------------------------------------
 
-def api_upcoming():
+def api_upcoming(options):
   """ query upcoming events """
 
   url = "http://%s:%s@%s:9981/%s" % (
@@ -43,7 +43,11 @@ def api_upcoming():
                                     TVHEADEND_UPCOMING_API)
   try:
     req = requests.get(url)
-    return sorted(req.json()['entries'], key=itemgetter('start_real'))
+    recordings = sorted(req.json()['entries'], key=itemgetter('start_real'))
+    if options.ignore_running:
+      return [r for r in recordings if r["status"] != "Running"]
+    else:
+      return recordings
   except:
     return []
 
@@ -52,7 +56,7 @@ def api_upcoming():
 def print_upcoming(options,all=True):
   """ output upcoming recordings """
 
-  next_recordings = api_upcoming()
+  next_recordings = api_upcoming(options)
 
   for rec in next_recordings:
     start = datetime.datetime.fromtimestamp(rec['start_real'])
@@ -75,7 +79,7 @@ end:      %s\n""" % (rec['channelname'],
 def print_next_rec_time(options,out=True):
   """ output next recording time """
 
-  next_recordings = api_upcoming()
+  next_recordings = api_upcoming(options)
   if len(next_recordings):
     start = datetime.datetime.fromtimestamp(next_recordings[0]['start_real'])
     print(start.strftime("%Y-%m-%d %H:%M:%S"))
@@ -114,7 +118,7 @@ def check_next_rec_time(options,out=True):
   delta = parse_span(options.span)
   Msg.msg("DEBUG","delta: %s" % delta)
 
-  next_recordings = api_upcoming()
+  next_recordings = api_upcoming(options)
   have_rec = False
   if len(next_recordings):
     delta = parse_span(options.span)
@@ -146,7 +150,7 @@ def get_parser():
     help='check if a recording is scheduled within time-span')
   parser.add_argument('-i', '--ignore-running', action='store_true',
     dest='ignore_running',
-    help='ignore running recordings (use with -n or -N)')
+    help='ignore running recordings (use with -u, -n or -N)')
 
   parser.add_argument('-q', '--quiet', default=False, action='store_true',
     dest='quiet',
