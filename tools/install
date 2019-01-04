@@ -65,7 +65,10 @@ install_files() {
 # --- configure system   ----------------------------------------------------
 
 configure_system() {
-  :
+  # we add an additional dependency to wake-on-rtc.service
+  [ -f /etc/systemd/system/wake-on-rtc.service ] && \
+            sed -i -e "/After=/s/$/ tvheadend.service/" \
+                                    /etc/systemd/system/wake-on-rtc.service
 }
 
 # --- activate service   ----------------------------------------------------
