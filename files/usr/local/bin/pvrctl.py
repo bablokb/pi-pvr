@@ -144,6 +144,9 @@ def get_parser():
   parser.add_argument('-N', '--next-rec-within', metavar='time-span',
     dest='span', default=None,
     help='check if a recording is scheduled within time-span')
+  parser.add_argument('-i', '--ignore-running', action='store_true',
+    dest='ignore_running',
+    help='ignore running recordings (use with -n or -N)')
 
   parser.add_argument('-q', '--quiet', default=False, action='store_true',
     dest='quiet',
