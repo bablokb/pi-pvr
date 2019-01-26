@@ -1,0 +1,23 @@
+# --------------------------------------------------------------------------
+# Manage boot and shutdown for tvheadend-based pvr
+#
+# Configuration settings for shell-scripts
+#
+# Author: Bernhard Bablok
+# License: GPL3
+#
+# Website: https://github.com/bablokb/pi-pvr
+#
+# --------------------------------------------------------------------------
+
+# pvr_on_halt:
+delta_rec_on_halt="36:00"    # check for recordings within this time (HH:MM)
+idle_boot_at="06:00"         # next boot, if no recording is scheduled
+
+# pvr_on_boot:
+delta_rec_on_boot="01:00"      # shutdown, if no recording planned within
+shutdown_delay_on_boot="30"    # shutdown delay
+
+# pvr_after_recording:
+delta_rec_after_recording="00:30"    # shutdown, if no recording planned within
+shutdown_delay_recording="00:05"     # shutdown delay
