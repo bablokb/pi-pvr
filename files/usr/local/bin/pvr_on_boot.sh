@@ -9,14 +9,14 @@
 #
 # --------------------------------------------------------------------------
 
-delta_rec="01:00"    # one hour
-delta_shutdown="30"  # 30 minutes
+# source configuration
+. /etc/pvrctl.rc
 
 # we only do something special on an rtc alarm
 
 if [ "$1" = "alarm" ]; then
-  if ! pvrctl.py -q -N "$delta_rec"; then
+  if ! pvrctl.py -q -N "$delta_rec_on_boot"; then
     # no recording within delta, so give the system some time
     # to update the EPG and shutdown again
-    shutdown -h +"$delta_shutdown"
+    shutdown -h +"$shutdown_delay_on_boot"
 fi

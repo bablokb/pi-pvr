@@ -9,10 +9,10 @@
 #
 # --------------------------------------------------------------------------
 
-no_rec_limit="36:00"    # check for recordings within this time
-idle_boot_at="06:00"    # next boot, if no recording is scheduled
+# source configuration
+. /etc/pvrctl.rc
 
-if pvrctl.py -i -q -N "$no_rec_limit"; then
+if pvrctl.py -i -q -N "$delta_rec_on_halt"; then
   pvrctl.py -i -n
 else
   date -d "tomorrow $idle_boot_at" +"%Y-%m-%d %H:%M:%S"
