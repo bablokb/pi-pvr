@@ -52,7 +52,15 @@ def api_upcoming(options):
   except:
     return []
 
-# --- status   --------------------------------------------------------------
+# --- set status   ----------------------------------------------------------
+
+def set_status(options):
+  """ set boot/auto-halt status """
+
+  with open(STATUS_FILE,"w") as sfile:
+    status = sfile.write(options.do_halt_mode)
+
+# --- print status   --------------------------------------------------------
 
 def print_status(options):
   """ print boot/auto-halt status """
@@ -171,6 +179,10 @@ def get_parser():
   parser.add_argument('-s', '--status', action='store_true',
     dest='do_status',
     help='show boot/auto-halt status')
+  parser.add_argument('-H', '--halt', metavar='halt-mode',
+    dest='do_halt_mode', default=None,
+    choices=['none','auto'],
+    help='halt-mode: none (no automatic halt) or auto (halt after next recording)')
 
   parser.add_argument('-q', '--quiet', default=False, action='store_true',
     dest='quiet',
@@ -224,7 +236,9 @@ if __name__ == '__main__':
   # add global objects
   options.config = config
 
-  if options.do_status:
+  if options.do_halt_mode:
+    set_status(options)
+  elif options.do_status:
     print_status(options)
   elif options.do_next:
     print_next_rec_time(options)
