@@ -13,6 +13,7 @@
 # --------------------------------------------------------------------------
 
 TVHEADEND_UPCOMING_API="api/dvr/entry/grid_upcoming"
+STATUS_FILE="/var/run/wake-on-rtc.status"
 
 # --- system imports   -----------------------------------------------------
 
@@ -50,6 +51,21 @@ def api_upcoming(options):
       return recordings
   except:
     return []
+
+# --- status   --------------------------------------------------------------
+
+def print_status(options):
+  """ print boot/auto-halt status """
+
+  status = "unknown"
+  if os.path.exists(STATUS_FILE):
+    with open(STATUS_FILE,"r") as sfile:
+      status = sfile.readline()
+    if status == "normal":
+      status = "normal boot, no automatic halt after next recording"
+    else:
+      status = "automatic boot, automatic halt after next recording"
+  print(status)
 
 # --- print upcoming recordings   -------------------------------------------
 
@@ -152,6 +168,10 @@ def get_parser():
     dest='ignore_running',
     help='ignore running recordings (use with -u, -n or -N)')
 
+  parser.add_argument('-s', '--status', action='store_true',
+    dest='do_status',
+    help='show boot/auto-halt status')
+
   parser.add_argument('-q', '--quiet', default=False, action='store_true',
     dest='quiet',
     help='do not print anything (sets log-level to NONE)')
@@ -204,7 +224,9 @@ if __name__ == '__main__':
   # add global objects
   options.config = config
 
-  if options.do_next:
+  if options.do_status:
+    print_status(options)
+  elif options.do_next:
     print_next_rec_time(options)
   elif options.do_upcoming:
     print_upcoming(options)
