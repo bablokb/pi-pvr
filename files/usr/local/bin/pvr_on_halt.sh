@@ -12,8 +12,8 @@
 # source configuration
 . /etc/pvrctl.rc
 
-if pvrctl.py -i -q -N "$delta_rec_on_halt"; then
-  next_boot=$(pvrctl.py -i -n)
+if $PVR_BIN_PATH/pvrctl.py -i -q -N "$delta_rec_on_halt"; then
+  next_boot=$($PVR_BIN_PATH/pvrctl.py -i -n)
 else
   next_boot=$(date -d "tomorrow $idle_boot_at" +"%Y-%m-%d %H:%M:%S")
 fi

@@ -18,10 +18,10 @@
 
 if [ $(cat /var/run/wake-on-rtc.status) = "normal" ]; then
   logger -t pvr_after_recording "normal startup, do nothing"
-  return
+  exit 0
 fi
 
-if ! pvrctl.py -q -N "$delta_rec_after_recording"; then
+if ! $PVR_BIN_PATH/pvrctl.py -q -N "$delta_rec_after_recording"; then
   # no recording within delta_rec, so shutdown
   logger -t pvr_after_recording \
          "next recording not within $delta_rec_after_recording, shutting down"

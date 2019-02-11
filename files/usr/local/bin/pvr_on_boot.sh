@@ -15,7 +15,7 @@
 # we only do something special on an rtc alarm
 
 if [ "$1" = "alarm" ]; then
-  if ! pvrctl.py -q -N "$delta_rec_on_boot"; then
+  if ! $PVR_BIN_PATH/pvrctl.py -q -N "$delta_rec_on_boot"; then
     # no recording within delta, so give the system some time
     # to update the EPG and shutdown again
     logger -t pvr_on_boot \
