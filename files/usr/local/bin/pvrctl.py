@@ -181,8 +181,8 @@ def get_parser():
     help='show boot/auto-halt status')
   parser.add_argument('-H', '--halt', metavar='halt-mode',
     dest='do_halt_mode', default=None,
-    choices=['none','auto'],
-    help='halt-mode: none (no automatic halt) or auto (halt after next recording)')
+    choices=['normal','auto'],
+    help='halt-mode: normal (no automatic halt) or auto (halt after next recording)')
 
   parser.add_argument('-q', '--quiet', default=False, action='store_true',
     dest='quiet',
