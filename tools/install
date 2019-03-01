@@ -11,6 +11,9 @@
 
 PACKAGES=""
 PROJECT="pi-pvr"
+CONFIG_FILES="/etc/pvrctl.conf /etc/pvrctl.rc /etc/wake-on-rtc.conf"
+
+rand="$RANDOM"
 
 # --- basic packages   ------------------------------------------------------
 
@@ -32,16 +35,33 @@ install_packages() {
   fi
 }
 
+# --- save configuration   --------------------------------------------------
+
+save_config() {
+  for f in $CONFIG_FILES; do
+    if [ -f "$f" ]; then
+      mv "$f" "$f.$rand"
+    fi
+  done
+}
+
+# --- restore configuration   -----------------------------------------------
+
+restore_config() {
+  for f in $CONFIG_FILES; do
+    if [ -f "$f.$rand" ]; then
+      mv "$f" "$f.new.$rand"
+      mv "$f.$rand" "$f"
+      echo -e "[INFO] new version of configuration file $f saved to: $f.new.$rand" 2>&1
+    fi
+  done
+}
+
 # --- install specific files   ----------------------------------------------
 
 install_files() {
   echo -e "[INFO] installing project files" 2>&1
 
-  rand="$RANDOM"
-  if [ -f "/etc/$PROJECT.conf" ]; then
-    # save current configuration
-    mv "/etc/$PROJECT.conf" "/etc/$PROJECT.conf.$rand"
-  fi
 
   for f in `find $(dirname "$0")/../files/ -type f -not -name "*.pyc"`; do
     target="${f#*files}"
@@ -53,13 +73,6 @@ install_files() {
 
   chmod 755 "/usr/local/bin/pvrctl.py"
   chmod 755 /usr/local/bin/pvr_*.sh
-
-  # restore old configuration
-  if [ -f "/etc/$PROJECT.conf.$rand" ]; then
-    mv -f "/etc/$PROJECT.conf" "/etc/$PROJECT.conf.new"
-    mv "/etc/$PROJECT.conf.$rand" "/etc/$PROJECT.conf"
-    echo -e "[INFO] new version of configuration file saved to: /etc/$PROJECT.conf.new" 2>&1
-  fi
 }
 
 # --- configure system   ----------------------------------------------------
@@ -80,7 +93,9 @@ enable_services() {
 # --- main program   --------------------------------------------------------
 
 install_packages
+save_configuration
 install_files
+restore_configuration
 configure_system
 enable_services
 
