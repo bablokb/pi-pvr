@@ -93,9 +93,9 @@ enable_services() {
 # --- main program   --------------------------------------------------------
 
 install_packages
-save_configuration
+save_config
 install_files
-restore_configuration
+restore_config
 configure_system
 enable_services
 
