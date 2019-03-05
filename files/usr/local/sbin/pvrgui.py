@@ -13,6 +13,8 @@
 import sys, os, datetime, threading, signal
 import fbgui
 
+from pvrcec import CECController as CECController
+
 # --- global constants   -----------------------------------------------------
 
 FG_COLOR = fbgui.Color.WHITE
@@ -41,6 +43,8 @@ class PvrGui(fbgui.App):
     panel = self._get_widgets()
     panel.pack()
     self.set_widget(panel)
+
+    self._cec = CECController(self)
 
   # -------------------------------------------------------------------------
 
