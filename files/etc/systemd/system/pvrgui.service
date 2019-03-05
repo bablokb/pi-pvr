@@ -1,0 +1,19 @@
+# --------------------------------------------------------------------------
+# Simple GUI for PVR - supports shutdown and start of kodi.
+#
+# Author: Bernhard Bablok
+# License: GPL3
+#
+# Website: https://github.com/bablokb/pi-pvr
+#
+# --------------------------------------------------------------------------
+
+[Unit]
+Description=PVR Gui
+ 
+[Service]
+Type=simple
+ExecStart=/usr/bin/nohup /usr/local/sbin/pvrgui.py
+
+[Install]
+WantedBy=basic.target
