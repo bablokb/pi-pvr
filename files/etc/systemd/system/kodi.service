@@ -1,0 +1,22 @@
+# --------------------------------------------------------------------------
+# Kodi standalone service
+#
+# Author: Bernhard Bablok
+# License: GPL3
+#
+# Website: https://github.com/bablokb/pi-pvr
+#
+# --------------------------------------------------------------------------
+
+[Unit]
+Description=Kodi Media Center
+ 
+[Service]
+Type=simple
+ExecStart=/usr/bin/kodi
+User=pi
+Conflicts=pvrgui.service
+After=pvrgui.service
+
+[Install]
+WantedBy=basic.target
