@@ -88,6 +88,7 @@ class CECController(object):
       self._controller.StandbyDevices(cec.CECDEVICE_BROADCAST)
     elif key == cec.CEC_USER_CONTROL_CODE_F4_YELLOW:
       self._app.logger.msg("DEBUG","key yellow pressed")
+      os.system("systemctl start kodi.service")
 
     return 0
 
