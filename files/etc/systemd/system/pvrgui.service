@@ -14,6 +14,7 @@ Description=PVR Gui
 [Service]
 Type=simple
 ExecStart=/usr/bin/nohup /usr/local/sbin/pvrgui.py
+Conflicts=kodi.service
 
 [Install]
 WantedBy=basic.target
