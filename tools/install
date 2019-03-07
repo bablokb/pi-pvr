@@ -9,6 +9,8 @@
 #
 # ---------------------------------------------------------------------------
 
+KODI_USER="${1:-pi}"
+
 PACKAGES=""
 PROJECT="pi-pvr"
 CONFIG_FILES="/etc/pvrctl.conf /etc/pvrctl.rc /etc/wake-on-rtc.conf"
@@ -87,7 +89,10 @@ configure_system() {
 # --- activate service   ----------------------------------------------------
 
 enable_services() {
-  :
+  sed -i -e "/User=/s/=.*/=$KODI_USER/" /etc/systemd/system/kodi.service
+  # systemctl enable kodi.service   # don't enable it!
+  systemctl enable pvrgui.service
+  systemctl start  pvrgui.service
 }
 
 # --- main program   --------------------------------------------------------
