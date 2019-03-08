@@ -10,7 +10,7 @@
 #
 # --------------------------------------------------------------------------
 
-import sys, os, datetime, threading, signal
+import sys, os, datetime, threading, signal, subprocess
 import fbgui
 
 from pvrcec import CECController as CECController
@@ -61,9 +61,10 @@ class PvrGui(fbgui.App):
     self._add_date_box(main)
 
     # add info-box
-    self._info_box = fbgui.Text("info_box",None,
+    self._info_box = fbgui.Text("info_box","",
                                  settings=fbgui.Settings({
-                                   'bg_color': fbgui.Color.SILVER,           
+                                   'bg_color': fbgui.Color.SILVER,
+                                   'font_name': "/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf",
                                    'margins': 20,
                                    'width': 1.0,
                                    'height': 800
@@ -163,6 +164,8 @@ class PvrGui(fbgui.App):
   def on_start(self):
     """ override base-class on_start-method """
 
+    info = subprocess.check_output(['pvrctl.py','-u'])
+    self.update_info(info.decode('utf-8'))
     # setup async-thread
     update_thread = threading.Thread(target=myapp._update_datetime)
     update_thread.start()
