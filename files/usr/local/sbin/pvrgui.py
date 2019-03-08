@@ -61,7 +61,7 @@ class PvrGui(fbgui.App):
     self._add_date_box(main)
 
     # add info-box
-    self._info_box = fbgui.Panel("info_box",
+    self._info_box = fbgui.Text("info_box",None,
                                  settings=fbgui.Settings({
                                    'bg_color': fbgui.Color.SILVER,           
                                    'margins': 20,
@@ -135,21 +135,37 @@ class PvrGui(fbgui.App):
 
   # -------------------------------------------------------------------------
 
-  def _cec_control(self):
-    """ configure CEC """
-    pass
+  def _update_datetime(self):
+    """ update datetime """
+
+    delay = 0.01
+    while True:
+      if self._stop_event.wait(delay):
+        # external break request
+        break
+
+      # update datetime
+      now = datetime.datetime.now()
+      self._date.set_text(now.strftime("%a %d.%m.%y %H:%M"),refresh=True)
+
+      # now wait until next change of minute
+      delay = 60 - datetime.datetime.now().second
+
+  # -----------------------------------------------------------------------
+
+  def update_info(self,text):
+    """ update info-box """
+
+    self._info_box.set_text(text,refresh=True)
 
   # -----------------------------------------------------------------------
 
   def on_start(self):
     """ override base-class on_start-method """
 
-    now = datetime.datetime.now()
-    self._date.set_text(now.strftime("%a %d.%m.%y %H:%M"))
-
     # setup async-thread
-    #cec_thread = threading.Thread(target=myapp._cec_control)
-    #cec_thread.start()
+    update_thread = threading.Thread(target=myapp._update_datetime)
+    update_thread.start()
 
   # -----------------------------------------------------------------------
 
