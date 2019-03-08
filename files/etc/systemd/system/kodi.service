@@ -13,10 +13,8 @@ Description=Kodi Media Center
  
 [Service]
 Type=simple
+Environment=HOME=/root
 ExecStart=/usr/bin/kodi
-User=pi
-Conflicts=pvrgui.service
-After=pvrgui.service
 
 [Install]
 WantedBy=basic.target
