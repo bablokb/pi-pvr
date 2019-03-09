@@ -139,6 +139,40 @@ class PvrGui(fbgui.App):
   def _update_datetime(self):
     """ update datetime """
 
+    now = datetime.datetime.now()
+    self._date.set_text(now.strftime("%a %d.%m.%y %H:%M"),refresh=True)
+
+  # -----------------------------------------------------------------------
+
+  def _update_msg(self):
+    """ update message """
+
+    try:
+      status = subprocess.check_output(['pvrctl.py','-s']).decode('utf-8')
+      if status.startswith("normal"):
+        msg = "no automatic halt"
+      else:
+        msg = "turned off after next recording"
+    except:
+      msg = "does not turn off automatically"
+    self._msg.set_text(msg,refresh=True)
+
+  # -----------------------------------------------------------------------
+
+  def _update_info(self):
+    """ update info-box """
+
+    try:
+      info = subprocess.check_output(['pvrctl.py','-u']).decode('utf-8')
+    except:
+      info = "no information available"
+    self._info_box.set_text(info,refresh=True)
+
+  # -----------------------------------------------------------------------
+
+  def _update(self):
+    """ update on-screen information """
+
     delay = 0.01
     while True:
       if self._stop_event.wait(delay):
@@ -146,28 +180,24 @@ class PvrGui(fbgui.App):
         break
 
       # update datetime
-      now = datetime.datetime.now()
-      self._date.set_text(now.strftime("%a %d.%m.%y %H:%M"),refresh=True)
+      self._update_datetime()
 
-      # now wait until next change of minute
-      delay = 60 - datetime.datetime.now().second
+      # update message-area
+      self._update_msg()
 
-  # -----------------------------------------------------------------------
+      # update info-area
+      self._update_info()
 
-  def update_info(self,text):
-    """ update info-box """
-
-    self._info_box.set_text(text,refresh=True)
+      # check for external break every 15 seconds, but don't miss time-change
+      delay = min(60 - datetime.datetime.now().second,15)
 
   # -----------------------------------------------------------------------
 
   def on_start(self):
     """ override base-class on_start-method """
 
-    info = subprocess.check_output(['pvrctl.py','-u'])
-    self.update_info(info.decode('utf-8'))
     # setup async-thread
-    update_thread = threading.Thread(target=myapp._update_datetime)
+    update_thread = threading.Thread(target=myapp._update)
     update_thread.start()
 
   # -----------------------------------------------------------------------
