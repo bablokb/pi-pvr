@@ -63,12 +63,13 @@ class PvrGui(fbgui.App):
     # add info-box
     self._info_box = fbgui.Text("info_box","",
                                  settings=fbgui.Settings({
-                                   'bg_color': fbgui.Color.SILVER,
-                                   'font_name': "/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf",
-                                   'margins': 20,
-                                   'width': 1.0,
-                                   'height': 800
-                                   }),parent=main)
+                                  'bg_color': fbgui.Color.SILVER,
+                                  'font_name': "/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf",
+                                  'radius': 0.1,
+                                  'margins': 20,
+                                  'width': 1.0,
+                                  'height': 800
+                                  }),parent=main)
     # add button-box
     self._add_button_box(main)
 
@@ -81,7 +82,8 @@ class PvrGui(fbgui.App):
 
     panel = fbgui.Panel("date_box",
                          settings=fbgui.Settings({
-                          'bg_color': fbgui.Color.SILVER,           
+                          'bg_color': fbgui.Color.SILVER,
+                          'radius': 0.9,
                           'margins': 20,
                           'width': 1.0,
                           'height': 100
@@ -127,7 +129,7 @@ class PvrGui(fbgui.App):
                    'height': 100
                    }),parent=box)
     
-    fbgui.Button("btn_blue",None,"",
+    fbgui.Button("btn_blue",None,"Switch off-mode",
                  settings=fbgui.Settings({
                    'bg_color': fbgui.Color.BLUE,
                    'width': 461,
