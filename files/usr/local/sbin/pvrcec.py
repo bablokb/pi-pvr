@@ -79,6 +79,7 @@ class CECController(object):
 
     if key == cec.CEC_USER_CONTROL_CODE_F1_BLUE:
       self._app.logger.msg("DEBUG","key blue pressed")
+      os.system("pvrctl.py -H toggle &")
     elif key == cec.CEC_USER_CONTROL_CODE_F2_RED:
       self._app.logger.msg("DEBUG","key red pressed")
       self._controller.StandbyDevices(cec.CECDEVICE_BROADCAST)
