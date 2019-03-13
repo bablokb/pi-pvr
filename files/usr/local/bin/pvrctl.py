@@ -57,22 +57,44 @@ def api_upcoming(options):
 def set_status(options):
   """ set boot/auto-halt status """
 
+  if options.do_halt_mode == "toggle":
+    old_mode = get_status(options)
+    if old_mode == "normal":
+      new_mode = "alarm"
+    elif old_mode == "alarm":
+      new_mode = "normal"
+    else:
+      new_mode = "alarm"
+  else:
+    new_mode = options.do_halt_mode
+
   with open(STATUS_FILE,"w") as sfile:
-    status = sfile.write(options.do_halt_mode)
+    status = sfile.write(new_mode)
+
+# --- get status   ----------------------------------------------------------
+
+def get_status(options):
+  """ get boot/auto-halt status """
+
+  if os.path.exists(STATUS_FILE):
+    with open(STATUS_FILE,"r") as sfile:
+      status = sfile.readline()
+  else:
+    status = 'normal'
+  return status
 
 # --- print status   --------------------------------------------------------
 
 def print_status(options):
   """ print boot/auto-halt status """
 
-  status = "unknown"
-  if os.path.exists(STATUS_FILE):
-    with open(STATUS_FILE,"r") as sfile:
-      status = sfile.readline()
-    if status == "normal":
-      status = "normal boot, no automatic halt after next recording"
-    else:
-      status = "automatic boot, automatic halt after next recording"
+  status = get_status(options)
+  if status == "normal":
+    status = "normal boot, no automatic halt after next recording"
+  elif status == "alarm":
+    status = "automatic boot, automatic halt after next recording"
+  else:
+    status = "unknown boot-status"
   print(status)
 
 # --- print upcoming recordings   -------------------------------------------
@@ -179,9 +201,9 @@ def get_parser():
   parser.add_argument('-s', '--status', action='store_true',
     dest='do_status',
     help='show boot/auto-halt status')
-  parser.add_argument('-H', '--halt', metavar='halt-mode',
-    dest='do_halt_mode', default=None,
-    choices=['normal','auto'],
+  parser.add_argument('-H', '--halt', metavar='halt-mode', nargs="?",
+    dest='do_halt_mode', default=None, const='toggle',
+    choices=['normal','auto','toggle'],
     help='halt-mode: normal (no automatic halt) or auto (halt after next recording)')
 
   parser.add_argument('-q', '--quiet', default=False, action='store_true',
