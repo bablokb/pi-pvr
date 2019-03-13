@@ -64,7 +64,7 @@ class PvrGui(fbgui.App):
     self._info_box = fbgui.Text("info_box","",
                                  settings=fbgui.Settings({
                                   'bg_color': fbgui.Color.SILVER,
-                                  'font_name': "/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf",
+                                  'font_name': "FreeMonoBold.ttf",
                                   'radius': 0.1,
                                   'margins': 20,
                                   'width': 1.0,
