@@ -24,8 +24,8 @@ FONT_SMALL  = 12
 FONT_MEDIUM = 24
 FONT_LARGE  = 48
 
-WIDTH  = 1920
-HEIGHT = 1080
+WIDTH  = 1500
+HEIGHT = 844
 
 # ----------------------------------------------------------------------------
 
@@ -61,6 +61,7 @@ class PvrGui(fbgui.App):
     self._add_date_box(main)
 
     # add info-box
+    # since we set weight only here, the infobx will take all available space
     self._info_box = fbgui.Text("info_box","",
                                  settings=fbgui.Settings({
                                   'bg_color': fbgui.Color.SILVER,
@@ -68,7 +69,8 @@ class PvrGui(fbgui.App):
                                   'radius': 0.1,
                                   'margins': 20,
                                   'width': 1.0,
-                                  'height': 800
+                                  'height': 0.5,
+                                  'weight': 1
                                   }),parent=main)
     # add button-box
     self._add_button_box(main)
@@ -86,7 +88,7 @@ class PvrGui(fbgui.App):
                           'radius': 0.9,
                           'margins': 20,
                           'width': 1.0,
-                          'height': 100
+                          'height': 0.093
                           }),parent=main)
     self._msg = fbgui.Label("msg_label","Hallo Welt",
                             settings=fbgui.Settings({
@@ -104,36 +106,40 @@ class PvrGui(fbgui.App):
     box = fbgui.HBox("button_box",
                      settings=fbgui.Settings({
                        'width': 1.0,
-                       'height': 100,
+                       'height': 0.093,
                        'padding': 12,
                        }),parent=main)
     
     fbgui.Button("btn_red",None,"Off",
                  settings=fbgui.Settings({
                    'bg_color': fbgui.Color.RED,
-                   'width': 461,
-                   'height': 100
+                   'width': 0.2,
+                   'height': 1.0,
+                   'weight': 1
                    }),parent=box)
     
     fbgui.Button("btn_green",None,"Standby",
                  settings=fbgui.Settings({
                    'bg_color': fbgui.Color.GREEN,
-                   'width': 461,
-                   'height': 100
+                   'width': 0.2,
+                   'height': 1.0,
+                   'weight': 1
                    }),parent=box)
     
     fbgui.Button("btn_yellow",None,"Kodi",
                  settings=fbgui.Settings({
                    'bg_color': fbgui.Color.YELLOW,
-                   'width': 461,
-                   'height': 100
+                   'width': 0.2,
+                   'height': 1.0,
+                   'weight': 1
                    }),parent=box)
     
     fbgui.Button("btn_blue",None,"Switch off-mode",
                  settings=fbgui.Settings({
                    'bg_color': fbgui.Color.BLUE,
                    'width': 461,
-                   'height': 100
+                   'height': 1.0,
+                   'weight': 1
                    }),parent=box)
 
   # -------------------------------------------------------------------------
