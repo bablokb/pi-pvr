@@ -113,7 +113,6 @@ class PvrGui(fbgui.App):
     fbgui.Button("btn_red",None,"Off",
                  settings=fbgui.Settings({
                    'bg_color': fbgui.Color.RED,
-                   'width': 0.2,
                    'height': 1.0,
                    'weight': 1
                    }),parent=box)
@@ -121,7 +120,6 @@ class PvrGui(fbgui.App):
     fbgui.Button("btn_green",None,"Standby",
                  settings=fbgui.Settings({
                    'bg_color': fbgui.Color.GREEN,
-                   'width': 0.2,
                    'height': 1.0,
                    'weight': 1
                    }),parent=box)
@@ -129,7 +127,7 @@ class PvrGui(fbgui.App):
     fbgui.Button("btn_yellow",None,"Kodi",
                  settings=fbgui.Settings({
                    'bg_color': fbgui.Color.YELLOW,
-                   'width': 0.2,
+                   '_width': 0.2,
                    'height': 1.0,
                    'weight': 1
                    }),parent=box)
@@ -137,9 +135,8 @@ class PvrGui(fbgui.App):
     fbgui.Button("btn_blue",None,"Switch off-mode",
                  settings=fbgui.Settings({
                    'bg_color': fbgui.Color.BLUE,
-                   'width': 461,
                    'height': 1.0,
-                   'weight': 1
+                   'weight': 0
                    }),parent=box)
 
   # -------------------------------------------------------------------------
