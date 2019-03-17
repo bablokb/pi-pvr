@@ -69,7 +69,6 @@ class PvrGui(fbgui.App):
                                   'radius': 0.1,
                                   'margins': 20,
                                   'width': 1.0,
-                                  'height': 0.5,
                                   'weight': 1
                                   }),parent=main)
     # add button-box
@@ -106,37 +105,29 @@ class PvrGui(fbgui.App):
     box = fbgui.HBox("button_box",
                      settings=fbgui.Settings({
                        'width': 1.0,
+                       'uniform': True,
                        'height': 0.093,
                        'padding': 12,
                        }),parent=main)
     
     fbgui.Button("btn_red",None,"Off",
                  settings=fbgui.Settings({
-                   'bg_color': fbgui.Color.RED,
-                   'height': 1.0,
-                   'weight': 1
+                   'bg_color': fbgui.Color.RED
                    }),parent=box)
     
     fbgui.Button("btn_green",None,"Standby",
                  settings=fbgui.Settings({
-                   'bg_color': fbgui.Color.GREEN,
-                   'height': 1.0,
-                   'weight': 1
+                   'bg_color': fbgui.Color.GREEN
                    }),parent=box)
     
     fbgui.Button("btn_yellow",None,"Kodi",
                  settings=fbgui.Settings({
-                   'bg_color': fbgui.Color.YELLOW,
-                   '_width': 0.2,
-                   'height': 1.0,
-                   'weight': 1
+                   'bg_color': fbgui.Color.YELLOW
                    }),parent=box)
     
-    fbgui.Button("btn_blue",None,"Switch off-mode",
+    fbgui.Button("btn_blue",None,"Off-mode",
                  settings=fbgui.Settings({
-                   'bg_color': fbgui.Color.BLUE,
-                   'height': 1.0,
-                   'weight': 0
+                   'bg_color': fbgui.Color.BLUE
                    }),parent=box)
 
   # -------------------------------------------------------------------------
