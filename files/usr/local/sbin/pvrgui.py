@@ -112,21 +112,25 @@ class PvrGui(fbgui.App):
     
     fbgui.Button("btn_red",None,"Off",
                  settings=fbgui.Settings({
+                   'weight': 1,
                    'bg_color': fbgui.Color.RED
                    }),parent=box)
     
     fbgui.Button("btn_green",None,"Standby",
                  settings=fbgui.Settings({
+                   'weight': 1,
                    'bg_color': fbgui.Color.GREEN
                    }),parent=box)
     
     fbgui.Button("btn_yellow",None,"Kodi",
                  settings=fbgui.Settings({
+                   'weight': 1,
                    'bg_color': fbgui.Color.YELLOW
                    }),parent=box)
     
     fbgui.Button("btn_blue",None,"Off-mode",
                  settings=fbgui.Settings({
+                   'weight': 1,
                    'bg_color': fbgui.Color.BLUE
                    }),parent=box)
 
