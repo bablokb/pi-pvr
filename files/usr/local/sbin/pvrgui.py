@@ -215,7 +215,7 @@ class PvrGui(fbgui.App):
 if __name__ == '__main__':
 
   config               = fbgui.Settings()
-  config.msg_level     = "TRACE"
+  config.msg_level     = "DEBUG"
   config.bg_color      = BG_COLOR
   config.font_name     = "FreeSans"
   config.font_size     = FONT_LARGE
