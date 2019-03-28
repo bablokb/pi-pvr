@@ -105,9 +105,23 @@ def print_upcoming(options,all=True):
   next_recordings = api_upcoming(options)
 
   for rec in next_recordings:
-    start = datetime.datetime.fromtimestamp(rec['start_real'])
-    end   = datetime.datetime.fromtimestamp(rec['stop_real'])
-    print("""
+    if options.format == 'raw':
+      pprint.pprint(rec)
+    elif options.format == 'json':
+      pprint.pprint(rec)
+    elif options.format == 'compact':
+      start = datetime.datetime.fromtimestamp(rec['start'])
+      end   = datetime.datetime.fromtimestamp(rec['stop'])
+      print("%s %s %s %s-%s" % (
+        rec['status'][0],
+        rec['channelname'],
+        rec['disp_title'],
+        start.strftime("%a %d.%m.%y %H:%M"),
+        end.strftime("%H:%M")))
+    else:
+      start = datetime.datetime.fromtimestamp(rec['start_real'])
+      end   = datetime.datetime.fromtimestamp(rec['stop_real'])
+      print("""
 channel:  %s
 title:    %s
 status:   %s
@@ -197,6 +211,10 @@ def get_parser():
   parser.add_argument('-i', '--ignore-running', action='store_true',
     dest='ignore_running',
     help='ignore running recordings (use with -u, -n or -N)')
+  parser.add_argument('-f', '--format', metavar='format',
+    dest='format', default='human',
+    choices=['human','compact','json','raw'],
+    help='format: one of human, compact, json, raw')
 
   parser.add_argument('-s', '--status', action='store_true',
     dest='do_status',
