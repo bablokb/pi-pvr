@@ -159,7 +159,8 @@ class PvrGui(fbgui.App):
     """ update info-box """
 
     try:
-      info = subprocess.check_output(['pvrctl.py','-u']).decode('utf-8')
+      info = subprocess.check_output(
+        ['pvrctl.py','-u','-f','compact']).decode('utf-8')
     except:
       info = "no information available"
     self._info_box.set_text(info,refresh=True)
