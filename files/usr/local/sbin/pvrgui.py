@@ -203,12 +203,12 @@ class PvrGui(fbgui.App):
 
   # -----------------------------------------------------------------------
 
-  def on_quit(self):
+  def on_quit(self,rc=0):
     """ override base-class quit-method """
 
-    super(PvrGui,self).on_quit()
+    rc = super(PvrGui,self).on_quit(rc=rc)
     self._stop_event.set()
-    sys.exit(0)
+    sys.exit(rc)
 
   # ----------------------------------------------------------------------------
 
