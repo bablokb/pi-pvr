@@ -13,7 +13,7 @@ Description=PVR Gui
  
 [Service]
 Type=simple
-ExecStart=/usr/bin/nohup /usr/local/sbin/pvrgui.py
+ExecStart=/usr/local/sbin/pvrgui-service.sh
 Conflicts=kodi.service
 
 [Install]
