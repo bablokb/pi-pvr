@@ -13,8 +13,7 @@ Description=PVR Gui
  
 [Service]
 Type=simple
-ExecStart=/usr/local/sbin/pvrgui-service.sh
-Conflicts=kodi.service
+ExecStart=nohup /usr/local/sbin/pvrgui-service.sh
 
 [Install]
 WantedBy=basic.target
