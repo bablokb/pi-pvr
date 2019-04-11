@@ -12,6 +12,7 @@
 # --------------------------------------------------------------------------
 
 import os
+import pygame
 
 try:
   import cec
@@ -28,6 +29,7 @@ class CECController(object):
 
     self._app      = app
     self._have_cec = False
+    pygame.fastevent.init()
     if have_cec_import:
       self._init_cec()
     else:
@@ -69,6 +71,15 @@ class CECController(object):
       #sems to be necessary at least with my DENON
       self._controller.GetActiveDevices()
 
+
+  # --- process key presses   ------------------------------------------------
+
+  def _post_quit(self,rc):
+    """ post quit event to application """
+
+    event = pygame.fastevent.Event(pygame.QUIT,rc=rc)
+    pygame.fastevent.post(event)
+
   # --- process key presses   ------------------------------------------------
   
   def _process_key(self, key, duration):
@@ -79,17 +90,17 @@ class CECController(object):
 
     if key == cec.CEC_USER_CONTROL_CODE_F1_BLUE:
       self._app.logger.msg("DEBUG","key blue pressed")
-      os.system("pvrctl.py -H toggle &")
+      os.system("pvrctl.py -H toggle")
     elif key == cec.CEC_USER_CONTROL_CODE_F2_RED:
       self._app.logger.msg("DEBUG","key red pressed")
       self._controller.StandbyDevices(cec.CECDEVICE_BROADCAST)
-      os.system("shutdown now")
+      self._post_quit(3)
     elif key == cec.CEC_USER_CONTROL_CODE_F3_GREEN:
       self._app.logger.msg("DEBUG","key green pressed")
       self._controller.StandbyDevices(cec.CECDEVICE_BROADCAST)
     elif key == cec.CEC_USER_CONTROL_CODE_F4_YELLOW:
       self._app.logger.msg("DEBUG","key yellow pressed")
-      os.system("systemctl start kodi.service")
+      self._post_quit(0)
 
     return 0
 
