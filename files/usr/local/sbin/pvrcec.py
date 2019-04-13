@@ -11,7 +11,7 @@
 #
 # --------------------------------------------------------------------------
 
-import os
+import os, subprocess, time
 import pygame
 
 try:
@@ -29,9 +29,10 @@ class CECController(object):
 
     self._app      = app
     self._have_cec = False
-    pygame.fastevent.init()
+    self._last_key = time.monotonic()          # last time key was pressed
     if have_cec_import:
       self._init_cec()
+      pygame.fastevent.init()
     else:
       self._app.logger.msg("WARN","import cec failed")
 
@@ -88,9 +89,16 @@ class CECController(object):
     # if the remote sends keys, we could map the keys to commands here
     self._app.logger.msg("DEBUG","key: " + str(key))
 
+    now = time.monotonic()
+    if now - self._last_key < 1:
+      self._app.logger.msg("DEBUG","ignoring key-press (bounce)")
+      return 0
+    else:
+      self._last_key = now
+
     if key == cec.CEC_USER_CONTROL_CODE_F1_BLUE:
       self._app.logger.msg("DEBUG","key blue pressed")
-      os.system("pvrctl.py -H toggle")
+      subprocess.call(['/usr/local/bin/pvrctl.py','-H'])
     elif key == cec.CEC_USER_CONTROL_CODE_F2_RED:
       self._app.logger.msg("DEBUG","key red pressed")
       self._controller.StandbyDevices(cec.CECDEVICE_BROADCAST)
