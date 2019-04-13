@@ -14,7 +14,7 @@ Description=PVR Gui
 [Service]
 Type=simple
 Environment=HOME=/root
-ExecStart=nohup /usr/local/sbin/pvrgui-service.sh
+ExecStart=/usr/bin/nohup /usr/local/sbin/pvrgui-service.sh
 
 [Install]
 WantedBy=basic.target
