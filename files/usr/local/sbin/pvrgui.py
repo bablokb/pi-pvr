@@ -144,7 +144,7 @@ class PvrGui(fbgui.App):
 
   # -----------------------------------------------------------------------
 
-  def _update_msg(self):
+  def update_msg(self):
     """ update message """
 
     try:
@@ -184,7 +184,7 @@ class PvrGui(fbgui.App):
       self._update_datetime()
 
       # update message-area
-      self._update_msg()
+      self.update_msg()
 
       # update info-area
       self._update_info()
