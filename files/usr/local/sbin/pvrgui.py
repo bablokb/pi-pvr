@@ -89,7 +89,7 @@ class PvrGui(fbgui.App):
                           'width': 1.0,
                           'height': 0.093
                           }),parent=main)
-    self._msg = fbgui.Label("msg_label","Hallo Welt",
+    self._msg = fbgui.Label("msg_label","initializing...",
                             settings=fbgui.Settings({
                               'align': fbgui.LEFT
                            }),parent=panel)
