@@ -24,6 +24,8 @@ except ImportError:
 class CECController(object):
   """ class CECController - a CEC controller """
 
+  KEY_BOUNCE_TIME = 5
+
   def __init__(self,app):
     """ initialization """
 
@@ -90,7 +92,7 @@ class CECController(object):
     self._app.logger.msg("DEBUG","key: " + str(key))
 
     now = time.monotonic()
-    if now - self._last_key < 1:
+    if now - self._last_key < CECController.KEY_BOUNCE_TIME:
       self._app.logger.msg("DEBUG","ignoring key-press (bounce)")
       return 0
     else:
