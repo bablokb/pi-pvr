@@ -1,0 +1,28 @@
+# --------------------------------------------------------------------------
+# Systemd service definition for the Wake-on-RTC service
+#
+# This service calls the script /usr/local/sbin/wake-on-rtc.py to start and
+# stop the service.
+#
+# Author: Bernhard Bablok
+# License: GPL3
+#
+# Website: https://github.com/bablokb/pi-wake-on-rtc
+#
+# --------------------------------------------------------------------------
+
+[Unit]
+Description=Wake-on-RTC service
+DefaultDependencies=no
+After=sysinit.target local-fs.target tvheadend.service
+Before=shutdown.target
+Conflicts=shutdown.target
+ 
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/usr/local/sbin/wake-on-rtc.py start
+ExecStop=/usr/local/sbin/wake-on-rtc.py stop
+
+[Install]
+WantedBy=multi-user.target
