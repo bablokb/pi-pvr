@@ -223,7 +223,7 @@ if __name__ == '__main__':
   config.width         = WIDTH
   config.height        = HEIGHT
   config.title         = "Status PVR"
-  config.mouse_drv     = None
+  config.mouse_dev     = None
   config.mouse_visible = False
 
   myapp = PvrGui(config)
