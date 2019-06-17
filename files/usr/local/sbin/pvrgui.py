@@ -10,14 +10,13 @@
 #
 # --------------------------------------------------------------------------
 
-import sys, os, datetime, threading, signal, subprocess
+import sys, os, datetime, threading, signal, subprocess, json
 import fbgui
 
 from pvrcec import CECController as CECController
 
 # --- global constants   -----------------------------------------------------
 
-FG_COLOR = fbgui.Color.WHITE
 BG_COLOR = fbgui.Color.BLACK
 
 FONT_SMALL  = 12
@@ -62,7 +61,7 @@ class PvrGui(fbgui.App):
 
     # add info-box
     # since we set weight only here, the infobx will take all available space
-    self._info_box = fbgui.Text("info_box","",
+    self._info_box = fbgui.List("info_box",None,
                                  settings=fbgui.Settings({
                                   'bg_color': fbgui.Color.SILVER,
                                   'font_name': "FreeMonoBold.ttf",
@@ -136,6 +135,22 @@ class PvrGui(fbgui.App):
 
   # -------------------------------------------------------------------------
 
+  def _create_list_entry(self,entry,nr):
+    """ create a HBox for the info-box """
+
+    fbgui.App.logger.msg("DEBUG","creating entry for %r" % (entry,))
+    text = "%s %s %s %s %s" % (entry['status'],
+                         entry['channel'],
+                         entry['title'],
+                         entry['date'],
+                         entry['time'])
+    return fbgui.Label("entry_%d" % nr,text,
+                       settings=fbgui.Settings({
+                          'bg_color': fbgui.Color.SILVER
+                         }))
+
+  # -------------------------------------------------------------------------
+
   def _update_datetime(self):
     """ update datetime """
 
@@ -162,12 +177,22 @@ class PvrGui(fbgui.App):
   def _update_info(self):
     """ update info-box """
 
+    # query information
     try:
       info = subprocess.check_output(
-        ['pvrctl.py','-u','-f','compact']).decode('utf-8')
+        ['pvrctl.py','-u','-f','json']).decode('utf-8')
+      entries = json.loads(info)['entries']
     except:
-      info = "no information available"
-    self._info_box.set_text(info,refresh=True)
+      entries = [" "]
+
+    # now clear and update info-box
+    self._info_box.clear(refresh=False)
+    index = 0
+    for entry in entries[:-1]:
+      self._info_box.add_items([self._create_list_entry(entry,index)],
+                               refresh=False)
+      index += 1
+    self._info_box.post_layout()
 
   # -----------------------------------------------------------------------
 
@@ -215,8 +240,8 @@ class PvrGui(fbgui.App):
 if __name__ == '__main__':
 
   config               = fbgui.Settings()
-  config.msg_level     = "DEBUG"
-  config.msg_syslog    = True
+  config.msg_level     = "TRACE"
+  config.msg_syslog    = False
   config.bg_color      = BG_COLOR
   config.font_name     = "FreeSans"
   config.font_size     = FONT_LARGE
