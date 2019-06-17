@@ -19,7 +19,7 @@ STATUS_FILE="/var/run/wake-on-rtc.status"
 
 from argparse import ArgumentParser
 from operator import itemgetter
-import sys, os, datetime, pprint
+import sys, os, datetime, pprint, locale
 import requests
 import configparser
 
@@ -108,7 +108,19 @@ def print_upcoming(options,all=True):
     if options.format == 'raw':
       pprint.pprint(rec)
     elif options.format == 'json':
-      pprint.pprint(rec)
+      start = datetime.datetime.fromtimestamp(rec['start'])
+      end   = datetime.datetime.fromtimestamp(rec['stop'])
+      print("""{'status': '%s',
+              'channel': '%s',
+              'title': '%s',
+              'date': '%s',
+              'time': '%s-%s'}""" % (
+        rec['status'][0],
+        rec['channelname'],
+        rec['disp_title'],
+        start.strftime("%x"),
+        start.strftime("%H:%M"),
+        end.strftime("%H:%M")))
     elif options.format == 'compact':
       start = datetime.datetime.fromtimestamp(rec['start'])
       end   = datetime.datetime.fromtimestamp(rec['stop'])
@@ -252,6 +264,9 @@ def get_config(parser):
 # --- main proram   ---------------------------------------------------------
 
 if __name__ == '__main__':
+
+  # set local to default from environment
+  locale.setlocale(locale.LC_ALL, '')
 
   config_parser = configparser.RawConfigParser()
   config_parser.read('/etc/pvrctl.conf')
