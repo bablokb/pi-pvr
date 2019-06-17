@@ -20,7 +20,7 @@ from pvrcec import CECController as CECController
 BG_COLOR = fbgui.Color.BLACK
 
 FONT_SMALL  = 12
-FONT_MEDIUM = 24
+FONT_MEDIUM = 30
 FONT_LARGE  = 48
 
 WIDTH  = 1500
@@ -144,10 +144,32 @@ class PvrGui(fbgui.App):
                          entry['title'],
                          entry['date'],
                          entry['time'])
-    return fbgui.Label("entry_%d" % nr,text,
-                       settings=fbgui.Settings({
-                          'bg_color': fbgui.Color.SILVER
-                         }))
+    prefix = "entry_%d" % nr
+    hbox = fbgui.HBox(prefix+"_hbox",
+                      settings=fbgui.Settings({
+                        'bg_color': fbgui.Color.SILVER,
+                        'padding': 10,
+                        'width': 1.0,
+                        'uniform': (0,1)
+                        }))
+    settings = fbgui.Settings({
+      'bg_color': fbgui.Color.SILVER,
+      'align': (fbgui.LEFT,fbgui.TOP),
+      'font_size': FONT_MEDIUM,
+      })
+    fbgui.Label(prefix+"_status",entry['status'],
+                settings=settings,parent=hbox)
+    settings.width=0.15
+    fbgui.Label(prefix+"_channel",entry['channel'],
+                settings=settings,parent=hbox)
+    fbgui.Label(prefix+"_date",entry['date'],
+                settings=settings,parent=hbox)
+    fbgui.Label(prefix+"_time",entry['time'],
+                settings=settings,parent=hbox)
+    settings.width=0.5
+    fbgui.Label(prefix+"_title",entry['title'],
+                settings=settings,parent=hbox)
+    return hbox
 
   # -------------------------------------------------------------------------
 
