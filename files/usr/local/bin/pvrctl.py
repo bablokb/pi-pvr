@@ -104,17 +104,20 @@ def print_upcoming(options,all=True):
 
   next_recordings = api_upcoming(options)
 
+  if options.format == 'json':
+    print("{\"entries\": [", end='')
   for rec in next_recordings:
     if options.format == 'raw':
       pprint.pprint(rec)
     elif options.format == 'json':
       start = datetime.datetime.fromtimestamp(rec['start'])
       end   = datetime.datetime.fromtimestamp(rec['stop'])
-      print("""{'status': '%s',
-              'channel': '%s',
-              'title': '%s',
-              'date': '%s',
-              'time': '%s-%s'}""" % (
+      print("""
+  {"status": "%s",
+   "channel": "%s",
+   "title": "%s",
+   "date": "%s",
+   "time": "%s-%s"},""" % (
         rec['status'][0],
         rec['channelname'],
         rec['disp_title'],
@@ -144,7 +147,11 @@ end:      %s\n""" % (rec['channelname'],
                      start.strftime("%c"),
                      end.strftime("%c")))
     if not all:
-      return    # after printing first entry
+      if options.format == 'json':
+        print("\" \" ]}")
+      return                                    # after printing first entry
+  if options.format == 'json':
+    print("\" \" ]}")            # the last " " is a hack to keep json happy
 
 # --- output next recording time   ------------------------------------------
 
