@@ -149,12 +149,11 @@ class PvrGui(fbgui.App):
                       settings=fbgui.Settings({
                         'bg_color': fbgui.Color.SILVER,
                         'padding': 10,
-                        'width': 1.0,
-                        'uniform': (0,1)
+                        'width': 1.0
                         }))
     settings = fbgui.Settings({
       'bg_color': fbgui.Color.SILVER,
-      'align': (fbgui.LEFT,fbgui.TOP),
+      'align': (fbgui.LEFT,fbgui.BOTTOM),
       'font_size': FONT_MEDIUM,
       })
     fbgui.Label(prefix+"_status",entry['status'],
@@ -262,8 +261,8 @@ class PvrGui(fbgui.App):
 if __name__ == '__main__':
 
   config               = fbgui.Settings()
-  config.msg_level     = "TRACE"
-  config.msg_syslog    = False
+  config.msg_level     = "WARN"
+  config.msg_syslog    = True
   config.bg_color      = BG_COLOR
   config.font_name     = "FreeSans"
   config.font_size     = FONT_LARGE
